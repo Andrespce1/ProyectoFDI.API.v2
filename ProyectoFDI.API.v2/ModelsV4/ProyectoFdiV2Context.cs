@@ -14,6 +14,7 @@ public partial class ProyectoFdiV2Context : DbContext
         : base(options)
     {
     }
+    public virtual DbSet<Boulder> Boulders { get; set; } = null!;
 
     public virtual DbSet<Categorium> Categoria { get; set; }
 
@@ -28,6 +29,7 @@ public partial class ProyectoFdiV2Context : DbContext
     public virtual DbSet<DetalleCompetenciaDificultad> DetalleCompetenciaDificultads { get; set; }
 
     public virtual DbSet<DetalleCompetencium> DetalleCompetencia { get; set; }
+    public virtual DbSet<Dificultad> Dificultads { get; set; } = null!;
 
     public virtual DbSet<Entrenador> Entrenadors { get; set; }
 
@@ -59,15 +61,50 @@ public partial class ProyectoFdiV2Context : DbContext
 
     public virtual DbSet<VistaViasResultado> VistaViasResultados { get; set; }
 
+    public virtual DbSet<VistaResultadosBloqueMixto> VistaResultadosBloqueMixtos { get; set; } = null!;
+    public virtual DbSet<VistaResultadosMixto> VistaResultadosMixtos { get; set; } = null!;
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         //=> optionsBuilder.UseSqlServer("Data Source=MSI;Initial Catalog=ProyectoFDI.v2;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-2G6AFFB;Initial Catalog=ProyectoFDI.v2;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
-
+       // => optionsBuilder.UseSqlServer("Data Source=DESKTOP-2G6AFFB;Initial Catalog=ProyectoFDI.v2;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer("Data Source=(localdb)\\local;Initial Catalog=ProyectoFDI.v2x;Integrated Security=True;");
+        
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
+        modelBuilder.Entity<Boulder>(entity =>
+        {
+            entity.HasKey(e => e.IdBoulder)
+                .HasName("PK__boulder__F4DB605D3806FD59");
 
+            entity.ToTable("boulder");
+
+            entity.Property(e => e.IdBoulder).HasColumnName("id_boulder");
+
+            entity.Property(e => e.IdCom).HasColumnName("id_com");
+
+            entity.Property(e => e.IdDep).HasColumnName("id_dep");
+
+            entity.Property(e => e.Intentos).HasColumnName("intentos");
+
+            entity.Property(e => e.NroBlo).HasColumnName("nro_blo");
+
+            entity.Property(e => e.Topr).HasColumnName("topr");
+
+            entity.Property(e => e.Zona1).HasColumnName("zona1");
+
+            entity.Property(e => e.Zona2).HasColumnName("zona2");
+
+            entity.HasOne(d => d.IdComNavigation)
+                .WithMany(p => p.Boulders)
+                .HasForeignKey(d => d.IdCom)
+                .HasConstraintName("FK__boulder__id_com__29221CFB");
+
+            entity.HasOne(d => d.IdDepNavigation)
+                .WithMany(p => p.Boulders)
+                .HasForeignKey(d => d.IdDep)
+                .HasConstraintName("FK__boulder__id_dep__2A164134");
+        });
         modelBuilder.Entity<Categorium>(entity =>
         {
             entity.HasKey(e => e.IdCat).HasName("PK__categori__D54686DE2D646EAA");
@@ -285,6 +322,40 @@ public partial class ProyectoFdiV2Context : DbContext
                 .HasForeignKey(d => d.IdDep)
                 .HasConstraintName("FK__detalle_c__id_de__619B8048");
         });
+
+        modelBuilder.Entity<Dificultad>(entity =>
+        {
+            entity.HasKey(e => e.IdDificultad)
+                .HasName("PK__dificult__BD8B0359F3B489F6");
+
+            entity.ToTable("dificultad");
+
+            entity.Property(e => e.IdDificultad).HasColumnName("id_dificultad");
+
+            entity.Property(e => e.IdCom).HasColumnName("id_com");
+
+            entity.Property(e => e.IdDep).HasColumnName("id_dep");
+
+            entity.Property(e => e.NroPresa)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("nro_presa");
+
+            entity.Property(e => e.Puntos).HasColumnName("puntos");
+
+            entity.HasOne(d => d.IdComNavigation)
+                .WithMany(p => p.Dificultads)
+                .HasForeignKey(d => d.IdCom)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__dificulta__id_co__30C33EC3");
+
+            entity.HasOne(d => d.IdDepNavigation)
+                .WithMany(p => p.Dificultads)
+                .HasForeignKey(d => d.IdDep)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__dificulta__id_de__31B762FC");
+        });
+
 
         modelBuilder.Entity<Entrenador>(entity =>
         {
@@ -643,6 +714,52 @@ public partial class ProyectoFdiV2Context : DbContext
             entity.Property(e => e.Tiempo)
                 .HasPrecision(3)
                 .HasColumnName("tiempo");
+        });
+
+        modelBuilder.Entity<VistaResultadosBloqueMixto>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.ToView("vista_resultados_bloque_mixto");
+
+            entity.Property(e => e.IdCom).HasColumnName("id_com");
+
+            entity.Property(e => e.IdDep).HasColumnName("id_dep");
+
+            entity.Property(e => e.NombreDeportista)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("nombre_deportista");
+
+            entity.Property(e => e.TotalResultado)
+                .HasColumnType("numeric(38, 1)")
+                .HasColumnName("total_resultado");
+        });
+
+        modelBuilder.Entity<VistaResultadosMixto>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.ToView("vista_resultados_mixto");
+
+            entity.Property(e => e.IdCom).HasColumnName("id_com");
+
+            entity.Property(e => e.IdDep).HasColumnName("id_dep");
+
+            entity.Property(e => e.NombreDeportista)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("nombre_deportista");
+
+            entity.Property(e => e.TotalFinal)
+                .HasColumnType("numeric(38, 1)")
+                .HasColumnName("total_final");
+
+            entity.Property(e => e.TotalPuntosDificultad).HasColumnName("total_puntos_dificultad");
+
+            entity.Property(e => e.TotalResultadoBloque)
+                .HasColumnType("numeric(38, 1)")
+                .HasColumnName("total_resultado_bloque");
         });
 
         OnModelCreatingPartial(modelBuilder);

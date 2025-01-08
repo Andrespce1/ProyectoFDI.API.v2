@@ -16,7 +16,7 @@ public partial class VistaPuntajesDeportista
     public string NombreDep { get; set; } = null!;
 
     public string? Etapa { get; set; }
-
+    //f
     public int? IntentosTops { get; set; }
 
     public int? TopsRealizados { get; set; }

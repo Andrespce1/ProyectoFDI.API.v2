@@ -38,6 +38,8 @@ public partial class Competencium
     public virtual Modalidad? IdModNavigation { get; set; }
 
     public virtual Sede? IdSedeNavigation { get; set; }
+    public virtual ICollection<Boulder> Boulders { get; set; }
+    public virtual ICollection<Dificultad> Dificultads { get; set; }
 
     public virtual ICollection<PuntajeBloque> PuntajeBloques { get; } = new List<PuntajeBloque>();
 
