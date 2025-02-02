@@ -20,35 +20,40 @@ namespace ProyectoFDI.API.v2.Controllers
             _context = context;
         }
 
-        // GET: api/Competencia
+        //// GET: api/Competencia
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Competencium>>> GetCompetencia(string? searchFor)
+        //{
+        //    var datos = _context.Competencia.Include("DetalleCompetencia.IdDepNavigation")
+        //        .Include("DetalleCompetenciaDificultads.IdDepNavigation");
+
+
+        //    if (string.IsNullOrWhiteSpace(searchFor))
+        //    {
+        //        return await datos.ToListAsync();
+        //    }
+        //    else
+        //    {
+        //        return await datos.Where(p =>
+        //            p.NombreCom.ToLower().Contains(searchFor.ToLower()) ||
+        //            p.FechaInicioCom.ToString().Contains(searchFor) ||
+        //            p.IdCatNavigation.NombreCat.ToLower().Contains(searchFor.ToLower()) ||
+        //            p.FechaFinCom.ToString().Contains(searchFor) ||
+        //            p.IdJuezNavigation.NombresJuez.ToLower().Contains(searchFor.ToLower()) ||
+        //            p.IdGenNavigation.NombreGen.ToLower().Contains(searchFor.ToLower()) ||
+        //            p.IdJuezNavigation.ApellidosJuez.ToLower().Contains(searchFor.ToLower()) ||
+        //            p.IdModNavigation.DescripcionMod.ToLower().Contains(searchFor.ToLower()) ||
+        //            p.IdSedeNavigation.NombreSede.ToLower().Contains(searchFor.ToLower())
+
+        //        ).ToListAsync();
+        //    }
+        //}
+        // GET: api/Usuario
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Competencium>>> GetCompetencia(string? searchFor)
+        public async Task<ActionResult<IEnumerable<Competencium>>> GetCompetencias()
         {
-            var datos = _context.Competencia.Include("DetalleCompetencia.IdDepNavigation")
-                .Include("DetalleCompetenciaDificultads.IdDepNavigation");
-
-
-            if (string.IsNullOrWhiteSpace(searchFor))
-            {
-                return await datos.ToListAsync();
-            }
-            else
-            {
-                return await datos.Where(p =>
-                    p.NombreCom.ToLower().Contains(searchFor.ToLower()) ||
-                    p.FechaInicioCom.ToString().Contains(searchFor) ||
-                    p.IdCatNavigation.NombreCat.ToLower().Contains(searchFor.ToLower()) ||
-                    p.FechaFinCom.ToString().Contains(searchFor) ||
-                    p.IdJuezNavigation.NombresJuez.ToLower().Contains(searchFor.ToLower()) ||
-                    p.IdGenNavigation.NombreGen.ToLower().Contains(searchFor.ToLower()) ||
-                    p.IdJuezNavigation.ApellidosJuez.ToLower().Contains(searchFor.ToLower()) ||
-                    p.IdModNavigation.DescripcionMod.ToLower().Contains(searchFor.ToLower()) ||
-                    p.IdSedeNavigation.NombreSede.ToLower().Contains(searchFor.ToLower())
-
-                ).ToListAsync();
-            }
+            return await _context.Competencia.ToListAsync();
         }
-
 
         //[HttpGet]
         //public async Task<ActionResult<IEnumerable<Competencium>>> GetCompetencia(string? searchFor)

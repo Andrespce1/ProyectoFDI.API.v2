@@ -44,8 +44,8 @@ public partial class Deportistum
     public virtual Provincium? IdProNavigation { get; set; }
 
     public virtual Usuario? IdUsuNavigation { get; set; }
-    public virtual ICollection<Boulder> Boulders { get; set; }
-    public virtual ICollection<Dificultad> Dificultads { get; set; }
+    public virtual ICollection<Boulder> Boulders { get; } = new List<Boulder>();
+    public virtual ICollection<Dificultad> Dificultads { get; } = new List<Dificultad>();
 
     public virtual ICollection<PuntajeBloque> PuntajeBloques { get; } = new List<PuntajeBloque>();
 
